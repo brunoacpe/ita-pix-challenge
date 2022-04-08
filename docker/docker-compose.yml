@@ -1,0 +1,18 @@
+version: "2"
+
+
+services:
+
+  database:
+    networks:
+      - pix-itaú-network
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    ports:
+      - "5432:5432"
+
+
+networks:
+  pix-itaú-network:
+    driver: bridge
