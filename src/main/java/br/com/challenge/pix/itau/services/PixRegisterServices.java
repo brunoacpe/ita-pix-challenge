@@ -4,6 +4,7 @@ import br.com.challenge.pix.itau.dto.PixRegisterRequest;
 import br.com.challenge.pix.itau.dto.PixRegisterResponse;
 import br.com.challenge.pix.itau.dto.UUIDRegisterDTO;
 import br.com.challenge.pix.itau.entity.PixRegister;
+import org.springframework.data.domain.Page;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,9 @@ public interface PixRegisterServices {
 
     PixRegisterResponse findRegisterById(String registerId);
 
-    List<PixRegisterResponse> findRegistersFiltered(
+    Page<PixRegisterResponse> findRegistersFiltered(
+            Integer page,
+            Integer size,
             String keyType,
             Integer agencyNumber,
             Integer accountNumber,

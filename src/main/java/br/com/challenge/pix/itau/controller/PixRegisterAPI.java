@@ -4,6 +4,7 @@ import br.com.challenge.pix.itau.dto.PixRegisterRequest;
 import br.com.challenge.pix.itau.dto.PixRegisterResponse;
 import br.com.challenge.pix.itau.dto.UUIDRegisterDTO;
 import br.com.challenge.pix.itau.entity.PixRegister;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,12 +52,14 @@ public interface PixRegisterAPI {
             produces = "application/json",
             method = RequestMethod.GET
     )
-    ResponseEntity<List<PixRegisterResponse>> filterRegisters(
+    ResponseEntity<Page<PixRegisterResponse>> filterRegisters(
+            @RequestParam(required = true) Integer page,
+            @RequestParam(required = true) Integer size,
             @RequestParam(required = false) String keyType,
             @RequestParam(required = false) Integer agencyNumber,
             @RequestParam(required = false) Integer accountNumber,
             @RequestParam(required = false) String userFirstName,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date createdAt,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") Date deletedAt
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date createdAt,
+            @RequestParam(required = false)@DateTimeFormat(pattern = "yyyy-MM-dd") Date deletedAt
     );
 }

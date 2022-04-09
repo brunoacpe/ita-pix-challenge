@@ -7,14 +7,19 @@ import br.com.challenge.pix.itau.entity.PixRegister;
 import br.com.challenge.pix.itau.exceptions.NoRegistersReturnedException;
 import br.com.challenge.pix.itau.exceptions.InvalidInputsException;
 import br.com.challenge.pix.itau.repository.PixRegisterRepository;
+import br.com.challenge.pix.itau.repository.specifications.PixRegisterSpecification;
+import br.com.challenge.pix.itau.utils.PaginationFunction;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -25,12 +30,13 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
 
     private final ValidationService validations;
 
+    private final SimpleDateFormat DATE_FORMATER = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
+    @SneakyThrows
     @Override
     public UUIDRegisterDTO createRegister(PixRegisterRequest request) {
         validations.validateRequest(request);
         PixRegister register = PixRegister.of(request);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         register.setCreatedAt(new Date());
         String uuid = repository
                 .save(register)
@@ -67,7 +73,9 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
     }
 
     @Override
-    public List<PixRegisterResponse> findRegistersFiltered(
+    public Page<PixRegisterResponse> findRegistersFiltered(
+            Integer page,
+            Integer size,
             String keyType,
             Integer agencyNumber,
             Integer accountNumber,
@@ -77,21 +85,21 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
     ) {
         if(createdAt!=null&&deletedAt!=null)
             throw new InvalidInputsException("Não é permitido filtrar com os dois campos de auditoria de data. Apenas um.");
-        List<PixRegister> filtedRegisters = repository.
-                findPixRegistersFiltering(
-                        keyType,
-                        agencyNumber,
-                        accountNumber,
-                        userFirstName,
-                        createdAt,
-                        deletedAt
-                );
-        if(filtedRegisters.isEmpty())
+
+        Specification<PixRegister> specification =  new PixRegisterSpecification(
+                keyType,agencyNumber,accountNumber,userFirstName,createdAt,deletedAt
+        );
+
+        List<PixRegister> filteredRegisters = repository.findAll(specification,Sort.by(Sort.Order.desc("createdAt")));
+
+        if(filteredRegisters.isEmpty())
             throw new NoRegistersReturnedException("Não foi encontrado nenhum registro com este filtro.");
 
-        return filtedRegisters
+        List<PixRegisterResponse> responses = filteredRegisters
                 .stream()
                 .map(PixRegisterResponse::of)
                 .collect(Collectors.toList());
+
+        return PaginationFunction.of(responses,page,size);
     }
 }

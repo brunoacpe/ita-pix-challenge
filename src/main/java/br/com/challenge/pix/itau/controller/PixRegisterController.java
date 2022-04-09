@@ -6,6 +6,7 @@ import br.com.challenge.pix.itau.dto.UUIDRegisterDTO;
 
 import br.com.challenge.pix.itau.services.PixRegisterServices;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +43,9 @@ public class PixRegisterController implements PixRegisterAPI{
     }
 
     @Override
-    public ResponseEntity<List<PixRegisterResponse>> filterRegisters(
+    public ResponseEntity<Page<PixRegisterResponse>> filterRegisters(
+            Integer page,
+            Integer size,
             String keyType,
             Integer agencyNumber,
             Integer accountNumber,
@@ -53,6 +56,8 @@ public class PixRegisterController implements PixRegisterAPI{
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(services.findRegistersFiltered(
+                        page,
+                        size,
                         keyType,
                         agencyNumber,
                         accountNumber,
