@@ -25,6 +25,8 @@ dependencies {
 	implementation 'javax.validation:validation-api:2.0.1.Final'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'br.com.caelum.stella:caelum-stella-core:2.1.5'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
