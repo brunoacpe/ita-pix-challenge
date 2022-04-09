@@ -5,14 +5,15 @@ import br.com.challenge.pix.itau.dto.PixRegisterRequest;
 
 public interface ValidationService {
 
+    void validateUserFirstName(String userFirstName);
+
+    void validateUserLastName(String userLastName);
 
     void validateRequest(PixRegisterRequest request);
 
     void keyTypeValidation(String keyValue);
 
     void cpfValidations(String cpf);
-
-    boolean validCnpjCalculations(String cnpj);
 
     void cnpjValidations(String cnpj);
 

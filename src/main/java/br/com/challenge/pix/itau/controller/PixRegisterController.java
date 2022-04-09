@@ -2,6 +2,7 @@ package br.com.challenge.pix.itau.controller;
 
 import br.com.challenge.pix.itau.dto.PixRegisterRequest;
 import br.com.challenge.pix.itau.dto.PixRegisterResponse;
+import br.com.challenge.pix.itau.dto.PixRegisterResponsePatch;
 import br.com.challenge.pix.itau.dto.UUIDRegisterDTO;
 
 import br.com.challenge.pix.itau.services.PixRegisterServices;
@@ -64,6 +65,16 @@ public class PixRegisterController implements PixRegisterAPI{
                         userFirstName,
                         createdAt,
                         deletedAt
+                ));
+    }
+
+    @Override
+    public ResponseEntity<PixRegisterResponsePatch> patchPixRegister(String registerId, PixRegisterRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(services.patchPixRegister(
+                        registerId,
+                        request
                 ));
     }
 

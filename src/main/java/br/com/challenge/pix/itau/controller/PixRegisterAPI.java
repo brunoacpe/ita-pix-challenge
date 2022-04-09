@@ -2,6 +2,7 @@ package br.com.challenge.pix.itau.controller;
 
 import br.com.challenge.pix.itau.dto.PixRegisterRequest;
 import br.com.challenge.pix.itau.dto.PixRegisterResponse;
+import br.com.challenge.pix.itau.dto.PixRegisterResponsePatch;
 import br.com.challenge.pix.itau.dto.UUIDRegisterDTO;
 import br.com.challenge.pix.itau.entity.PixRegister;
 import org.springframework.data.domain.Page;
@@ -61,5 +62,16 @@ public interface PixRegisterAPI {
             @RequestParam(required = false) String userFirstName,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date createdAt,
             @RequestParam(required = false)@DateTimeFormat(pattern = "yyyy-MM-dd") Date deletedAt
+    );
+
+    @RequestMapping(
+            value = "/{register_id}",
+            consumes = "application/json",
+            produces = "application/json",
+            method = RequestMethod.PATCH
+    )
+    ResponseEntity<PixRegisterResponsePatch> patchPixRegister(
+            @PathVariable String registerId,
+            @RequestBody PixRegisterRequest request
     );
 }

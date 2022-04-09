@@ -2,6 +2,7 @@ package br.com.challenge.pix.itau.services;
 
 import br.com.challenge.pix.itau.dto.PixRegisterRequest;
 import br.com.challenge.pix.itau.dto.PixRegisterResponse;
+import br.com.challenge.pix.itau.dto.PixRegisterResponsePatch;
 import br.com.challenge.pix.itau.dto.UUIDRegisterDTO;
 import br.com.challenge.pix.itau.entity.PixRegister;
 import org.springframework.data.domain.Page;
@@ -27,4 +28,6 @@ public interface PixRegisterServices {
             Date createdAt,
             Date deletedAt
     );
+
+    PixRegisterResponsePatch patchPixRegister(String registerId, PixRegisterRequest request);
 }

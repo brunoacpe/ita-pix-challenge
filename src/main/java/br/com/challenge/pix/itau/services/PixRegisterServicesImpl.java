@@ -2,6 +2,7 @@ package br.com.challenge.pix.itau.services;
 
 import br.com.challenge.pix.itau.dto.PixRegisterRequest;
 import br.com.challenge.pix.itau.dto.PixRegisterResponse;
+import br.com.challenge.pix.itau.dto.PixRegisterResponsePatch;
 import br.com.challenge.pix.itau.dto.UUIDRegisterDTO;
 import br.com.challenge.pix.itau.entity.PixRegister;
 import br.com.challenge.pix.itau.exceptions.NoRegistersReturnedException;
@@ -30,9 +31,6 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
 
     private final ValidationService validations;
 
-    private final SimpleDateFormat DATE_FORMATER = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-    @SneakyThrows
     @Override
     public UUIDRegisterDTO createRegister(PixRegisterRequest request) {
         validations.validateRequest(request);
@@ -101,5 +99,24 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
                 .collect(Collectors.toList());
 
         return PaginationFunction.of(responses,page,size);
+    }
+
+    @Override
+    public PixRegisterResponsePatch patchPixRegister(String registerId, PixRegisterRequest request) {
+        PixRegister register = repository.findById(UUID.fromString(registerId))
+                .orElseThrow(() -> new NoRegistersReturnedException("Não foi encontrado nenhum registro com este ID."));
+
+        if(register.getDeletedAt()!=null)
+            throw new InvalidInputsException("Não é possível alterar registros inativados.");
+
+        validations.validateRequest(request);
+
+        register.setAccountType(request.getAccountType());
+        register.setAccountNumber(request.getAccountNumber());
+        register.setAgencyNumber(request.getAgencyNumber());
+        register.setUserLastName(request.getUserLastName());
+        repository.save(register);
+
+        return PixRegisterResponsePatch.of(register);
     }
 }

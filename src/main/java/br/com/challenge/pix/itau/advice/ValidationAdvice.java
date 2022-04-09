@@ -16,6 +16,7 @@ import java.util.Map;
 @RestControllerAdvice
 @Slf4j
 public class ValidationAdvice {
+
     @ExceptionHandler(InvalidInputsException.class)
     public ResponseEntity<Object> handleInvalidKeyTypeException(InvalidInputsException e){
         log.error("Ocorreu um erro durante a validação do registro da chave PIX. Mensagem: {}", e.getExceptionMessage());
