@@ -25,21 +25,21 @@ public class PixRegister {
 
     @Id
     @GeneratedValue
-    private UUID id;
+    private UUID id;//nao
 
     @Column(
             name = "key_type",
             length = 9
     )
     @JsonProperty(value = "key_type")
-    private String keyType;
+    private String keyType;//nao
 
     @Column(
             name = "key_value",
             length = 77
     )
     @JsonProperty(value = "key_value")
-    private String keyValue;
+    private String keyValue;//nao
 
     @Column(
             name = "account_type",
@@ -79,14 +79,14 @@ public class PixRegister {
     )
     @JsonProperty(value = "created_at")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private Date createdAt;
+    private Date createdAt;//nao
 
     @Column(
             name = "deleted_at"
     )
     @JsonProperty(value = "deleted_at")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private Date deletedAt;
+    private Date deletedAt;//nao
 
     public static PixRegister of(PixRegisterRequest dto){
         PixRegister register = new PixRegister();

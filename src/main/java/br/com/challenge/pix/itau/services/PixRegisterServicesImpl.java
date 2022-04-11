@@ -109,11 +109,12 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
         if(register.getDeletedAt()!=null)
             throw new InvalidInputsException("Não é possível alterar registros inativados.");
 
-        validations.validateRequest(request);
+        validations.validatePatchRequest(request);
 
         register.setAccountType(request.getAccountType());
         register.setAccountNumber(request.getAccountNumber());
         register.setAgencyNumber(request.getAgencyNumber());
+        register.setUserFirstName(request.getUserFirstName());
         register.setUserLastName(request.getUserLastName());
         repository.save(register);
 

@@ -6,16 +6,20 @@ import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.challenge.pix.itau.dto.PixRegisterRequest;
 import br.com.challenge.pix.itau.exceptions.InvalidInputsException;
 import br.com.challenge.pix.itau.repository.PixRegisterRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 @Service
+@AllArgsConstructor
 public class ValidationServiceImpl implements ValidationService {
-    @Autowired
-    private PixRegisterRepository registerRepository;
+    public ValidationServiceImpl(PixRegisterRepository repository){
+        this.registerRepository = repository;
+    }
+    private final PixRegisterRepository registerRepository;
 
     @Value("${regex.email}")
     private String REGEX_EMAIL;
@@ -58,6 +62,20 @@ public class ValidationServiceImpl implements ValidationService {
         } else {
             emailValidations(requestKeyValue);
         }
+        accountTypeValid(accountType);
+        agencyNumberValid(agencyNumber);
+        accountNumberValid(accountNumber);
+        validateUserLastName(userLastName);
+        validateUserFirstName(userFirstName);
+    }
+
+    @Override
+    public void validatePatchRequest(PixRegisterRequest request) {
+        String accountType = request.getAccountType();
+        Integer accountNumber = request.getAccountNumber();
+        Integer agencyNumber = request.getAgencyNumber();
+        String userFirstName = request.getUserFirstName();
+        String userLastName = request.getUserLastName();
         accountTypeValid(accountType);
         agencyNumberValid(agencyNumber);
         accountNumberValid(accountNumber);

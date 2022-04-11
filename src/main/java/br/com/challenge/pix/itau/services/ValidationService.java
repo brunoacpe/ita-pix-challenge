@@ -11,6 +11,8 @@ public interface ValidationService {
 
     void validateRequest(PixRegisterRequest request);
 
+    void validatePatchRequest(PixRegisterRequest request);
+
     void keyTypeValidation(String keyValue);
 
     void cpfValidations(String cpf);
