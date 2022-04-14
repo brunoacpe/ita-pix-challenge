@@ -8,16 +8,14 @@ import br.com.challenge.pix.itau.entity.PixRegister;
 import br.com.challenge.pix.itau.exceptions.NoRegistersReturnedException;
 import br.com.challenge.pix.itau.exceptions.InvalidInputsException;
 import br.com.challenge.pix.itau.repository.PixRegisterRepository;
-import br.com.challenge.pix.itau.repository.specifications.PixRegisterSpecification;
 import br.com.challenge.pix.itau.utils.PaginationFunction;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -35,12 +33,11 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
     public UUIDRegisterDTO createRegister(PixRegisterRequest request) {
         validations.validateRequest(request);
         PixRegister register = PixRegister.of(request);
+        UUID randomUUID = UUID.randomUUID();
         register.setCreatedAt(new Date());
-        String uuid = repository
-                .save(register)
-                .getId()
-                .toString();
-        return new UUIDRegisterDTO(uuid);
+        register.setId(randomUUID);
+        repository.save(register);
+        return new UUIDRegisterDTO(randomUUID.toString());
     }
 
     @Override
@@ -83,12 +80,15 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
     ) {
         if(createdAt!=null&&deletedAt!=null)
             throw new InvalidInputsException("Não é permitido filtrar com os dois campos de auditoria de data. Apenas um.");
-
-        Specification<PixRegister> specification =  new PixRegisterSpecification(
-                keyType,agencyNumber,accountNumber,userFirstName,createdAt,deletedAt
-        );
-
-        List<PixRegister> filteredRegisters = repository.findAll(specification,Sort.by(Sort.Order.desc("createdAt")));
+        Page<PixRegister> filteredRegisters =  repository.findPixRegistersFiltered(
+                keyType,
+                agencyNumber,
+                accountNumber,
+                userFirstName,
+                createdAt,
+                deletedAt,
+                PageRequest.of(page,size, Sort.by(Sort.Order.desc("created_at")))
+        );;
 
         if(filteredRegisters.isEmpty())
             throw new NoRegistersReturnedException("Não foi encontrado nenhum registro com este filtro.");

@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -25,21 +24,21 @@ public class PixRegister {
 
     @Id
     @GeneratedValue
-    private UUID id;//nao
+    private UUID id;
 
     @Column(
             name = "key_type",
             length = 9
     )
     @JsonProperty(value = "key_type")
-    private String keyType;//nao
+    private String keyType;
 
     @Column(
             name = "key_value",
             length = 77
     )
     @JsonProperty(value = "key_value")
-    private String keyValue;//nao
+    private String keyValue;
 
     @Column(
             name = "account_type",
@@ -78,14 +77,12 @@ public class PixRegister {
             name = "created_at"
     )
     @JsonProperty(value = "created_at")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Date createdAt;//nao
 
     @Column(
             name = "deleted_at"
     )
     @JsonProperty(value = "deleted_at")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Date deletedAt;//nao
 
     public static PixRegister of(PixRegisterRequest dto){

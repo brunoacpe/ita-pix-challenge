@@ -4,7 +4,7 @@ import br.com.challenge.pix.itau.dto.PixRegisterRequest;
 import br.com.challenge.pix.itau.dto.PixRegisterResponse;
 import br.com.challenge.pix.itau.dto.PixRegisterResponsePatch;
 import br.com.challenge.pix.itau.dto.UUIDRegisterDTO;
-import br.com.challenge.pix.itau.entity.PixRegister;
+
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.List;
+
 
 @RestController
 @RequestMapping("/v1/api/register")
@@ -71,7 +71,7 @@ public interface PixRegisterAPI {
             method = RequestMethod.PATCH
     )
     ResponseEntity<PixRegisterResponsePatch> patchPixRegister(
-            @PathVariable String registerId,
+            @PathVariable(value = "register_id") String registerId,
             @RequestBody PixRegisterRequest request
     );
 }

@@ -1,11 +1,14 @@
 package br.com.challenge.pix.itau.repository;
 
 import br.com.challenge.pix.itau.entity.PixRegister;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 
 import java.util.Date;
 import java.util.List;
@@ -33,21 +36,29 @@ public interface PixRegisterRepository extends JpaRepository<PixRegister, UUID>,
     )
     Optional<PixRegister> findByCNPJ(String cnpj);
 
-//    @Query(
-//            value = "SELECT register FROM PixRegister register "+
-//                    "WHERE (:key_type IS NULL OR register.keyType = :key_type) "+
-//                    "AND (:agency_number IS NULL OR register.agencyNumber = :agency_number) "+
-//                    "AND (:account_number IS NULL OR register.accountNumber = :account_number) "+
-//                    "AND (:user_first_name IS NULL OR register.userFirstName = :user_first_name) "+
-//                    "AND (cast(:created_at as date) IS NULL OR register.createdAt = :created_at) "+
-//                    "AND (cast(:deleted_at as date) IS NULL OR register.deletedAt = :deleted_at)"
-//    )
-//    List<PixRegister> findPixRegistersFiltering(
-//            @Param(value = "key_type") String keyType,
-//            @Param(value = "agency_number") Integer agencyNumber,
-//            @Param(value = "account_number") Integer accountNumber,
-//            @Param(value = "user_first_name") String userFirstName,
-//            @Param(value = "created_at") Date createdAt,
-//            @Param(value = "deleted_at") Date deletedAt
-//    );
+    @Query(
+            value = "SELECT * from public.pix_registers pr where pr.account_number = ?1 and pr.agency_number = ?2 and pr.account_type = ?3",
+            nativeQuery = true
+    )
+    List<PixRegister> findRegistersByAccountNumberAndAgencyNumberAndAccountType(Integer accountNumber, Integer agencyNumber, String accountType);
+
+
+    @Query(
+            value = "SELECT register from PixRegister register " +
+                    "WHERE (:keyType IS NULL OR register.keyType = :keyType) " +
+                    "AND (:agencyNumber IS NULL OR register.agencyNumber = :agencyNumber) " +
+                    "AND (:accountNumber IS NULL OR register.accountNumber = :accountNumber) " +
+                    "AND (:userFirstName IS NULL OR register.userFirstName = :userFirstName) " +
+                    "AND (cast (:createdAt as date) IS NULL OR register.createdAt >= :createdAt) " +
+                    "AND (cast (:deletedAt as date) IS NULL OR register.deletedAt >= :deletedAt)"
+    )
+    Page<PixRegister> findPixRegistersFiltered(
+            @Param("keyType") String keyType,
+            @Param("agencyNumber") Integer agencyNumber,
+            @Param("accountNumber") Integer accountNumber,
+            @Param("userFirstName") String userFirstName,
+            @Param("createdAt") Date createdAt,
+            @Param("deletedAt") Date deletedAt,
+            Pageable pageable
+    );
 }

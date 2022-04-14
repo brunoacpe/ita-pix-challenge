@@ -1,6 +1,9 @@
 package br.com.challenge.pix.itau.services;
 
 import br.com.challenge.pix.itau.dto.PixRegisterRequest;
+import br.com.challenge.pix.itau.entity.PixRegister;
+
+import java.util.List;
 
 
 public interface ValidationService {

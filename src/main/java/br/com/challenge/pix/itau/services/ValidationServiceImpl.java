@@ -4,18 +4,25 @@ import br.com.caelum.stella.validation.CNPJValidator;
 import br.com.caelum.stella.validation.CPFValidator;
 import br.com.caelum.stella.validation.InvalidStateException;
 import br.com.challenge.pix.itau.dto.PixRegisterRequest;
+import br.com.challenge.pix.itau.entity.PixRegister;
 import br.com.challenge.pix.itau.exceptions.InvalidInputsException;
 import br.com.challenge.pix.itau.repository.PixRegisterRepository;
 import lombok.AllArgsConstructor;
 
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class ValidationServiceImpl implements ValidationService {
+
     public ValidationServiceImpl(PixRegisterRepository repository){
         this.registerRepository = repository;
     }
@@ -45,6 +52,7 @@ public class ValidationServiceImpl implements ValidationService {
                 throw new InvalidInputsException("O sobrenome do usuário não pode passar dos 45 caracteres.");
     }
 
+
     @Override
     public void validateRequest(PixRegisterRequest request) {
         String requestKeyType = request.getKeyType();
@@ -69,6 +77,7 @@ public class ValidationServiceImpl implements ValidationService {
         validateUserFirstName(userFirstName);
     }
 
+
     @Override
     public void validatePatchRequest(PixRegisterRequest request) {
         String accountType = request.getAccountType();
@@ -88,7 +97,6 @@ public class ValidationServiceImpl implements ValidationService {
         if (!keyType.equalsIgnoreCase(CPF) && !keyType.equalsIgnoreCase(CNPJ) && !keyType.equalsIgnoreCase(EMAIL))
             throw new InvalidInputsException("O valor da chave pix é inválido. Precisa ser um cpf, cnpj ou um email.");
     }
-
 
     @Override
     public void cpfValidations(String cpf) {
@@ -123,13 +131,10 @@ public class ValidationServiceImpl implements ValidationService {
 
     @Override
     public void emailValidations(String email) {
-
         if (registerRepository.findByEmail(email).isPresent())
             throw new InvalidInputsException("Já existe esse email cadastrado como chave pix.");
-
         if (email.length() > 77)
             throw new InvalidInputsException("A quantidade de caracteres do e-mail deve ser inferior ou igual a 77.");
-
     }
 
     @Override
@@ -147,7 +152,6 @@ public class ValidationServiceImpl implements ValidationService {
         if (String.valueOf(accountNumber).length() > 8)
             throw new InvalidInputsException("O número da conta deve ter 8 ou menos dígitos!");
     }
-
     @Override
     public void agencyNumberValid(Integer agencyNumber) {
         if (Objects.isNull(agencyNumber) || String.valueOf(agencyNumber).isEmpty())

@@ -2,21 +2,11 @@ package br.com.challenge.pix.itau.dto;
 
 import br.com.challenge.pix.itau.entity.PixRegister;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.util.Date;
-import java.util.List;
 import java.util.UUID;
-@Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class PixRegisterResponse {
 

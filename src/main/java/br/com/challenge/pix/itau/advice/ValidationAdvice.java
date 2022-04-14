@@ -30,8 +30,8 @@ public class ValidationAdvice {
     }
 
     @ExceptionHandler(NoRegistersReturnedException.class)
-    public ResponseEntity<Object> handleInvalidIdException(NoRegistersReturnedException e){
-        log.error("Ocorreu um erro durante a busca de um registro. Mensagem: {}", e.getExceptionMessage());
+    public ResponseEntity<Object> handleNoRegistersReturnedException(NoRegistersReturnedException e){
+        log.error("Ocorreu um erro durante a busca de um ou mais registros. Mensagem: {}", e.getExceptionMessage());
         Map<String,Object> response = new LinkedHashMap<>();
         response.put("exception_message", e.getExceptionMessage());
         response.put("timestamp", new Date());
