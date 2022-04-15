@@ -10,6 +10,7 @@ import br.com.challenge.pix.itau.exceptions.InvalidInputsException;
 import br.com.challenge.pix.itau.repository.PixRegisterRepository;
 import br.com.challenge.pix.itau.utils.PaginationFunction;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class PixRegisterServicesImpl implements PixRegisterServices{
 
     private final PixRegisterRepository repository;
@@ -37,6 +39,7 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
         register.setCreatedAt(new Date());
         register.setId(randomUUID);
         repository.save(register);
+        log.info("Novo registro inserido no banco. Registro: {}, UUID: {}, Data: {}", request.toString(), randomUUID.toString(), new Date());
         return new UUIDRegisterDTO(randomUUID.toString());
     }
 
@@ -53,7 +56,7 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
 
         register.setDeletedAt(new Date());
         repository.save(register);
-
+        log.info("Registro desativado. Registro: {}, Data: {}", register.toString(), new Date());
         return PixRegisterResponse.of(register);
     }
 
@@ -78,8 +81,10 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
             Date createdAt,
             Date deletedAt
     ) {
+
         if(createdAt!=null&&deletedAt!=null)
             throw new InvalidInputsException("Não é permitido filtrar com os dois campos de auditoria de data. Apenas um.");
+
         Page<PixRegister> filteredRegisters =  repository.findPixRegistersFiltered(
                 keyType,
                 agencyNumber,

@@ -29,4 +29,5 @@ public interface ValidationService {
     void accountNumberValid(Integer accountNumber);
 
     void agencyNumberValid(Integer agencyNumber);
+
 }

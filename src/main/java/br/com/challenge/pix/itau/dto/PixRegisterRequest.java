@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class PixRegisterRequest {
 
     @JsonProperty(value = "key_type")

@@ -6,16 +6,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import br.com.challenge.pix.itau.dto.PixRegisterRequest;
-import br.com.challenge.pix.itau.dto.UUIDRegisterDTO;
-import br.com.challenge.pix.itau.repository.PixRegisterRepository;
+
 import br.com.challenge.pix.itau.services.PixRegisterServices;
-import br.com.challenge.pix.itau.services.PixRegisterServicesImpl;
-import br.com.challenge.pix.itau.services.ValidationService;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;

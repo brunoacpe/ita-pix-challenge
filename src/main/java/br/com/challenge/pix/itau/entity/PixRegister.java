@@ -2,10 +2,7 @@ package br.com.challenge.pix.itau.entity;
 
 import br.com.challenge.pix.itau.dto.PixRegisterRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,6 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class PixRegister {
 
     @Id

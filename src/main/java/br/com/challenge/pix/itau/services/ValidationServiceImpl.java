@@ -21,12 +21,10 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@NoArgsConstructor
 public class ValidationServiceImpl implements ValidationService {
-
-    public ValidationServiceImpl(PixRegisterRepository repository){
-        this.registerRepository = repository;
-    }
-    private final PixRegisterRepository registerRepository;
+    @Autowired
+    private  PixRegisterRepository registerRepository;
 
     @Value("${regex.email}")
     private String REGEX_EMAIL;

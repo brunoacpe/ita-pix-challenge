@@ -3,6 +3,8 @@
 A ideia do projeto é criar uma API que vai ser capaz de cadastrar chaves pix para correntistas no itaú.
 
 
+#Url do swagger
+* http://localhost:8090/swagger-ui.html
 
 #Variáveis de ambiente para rodar o projeto.
 

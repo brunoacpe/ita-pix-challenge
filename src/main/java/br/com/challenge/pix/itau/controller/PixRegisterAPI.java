@@ -5,6 +5,7 @@ import br.com.challenge.pix.itau.dto.PixRegisterResponse;
 import br.com.challenge.pix.itau.dto.PixRegisterResponsePatch;
 import br.com.challenge.pix.itau.dto.UUIDRegisterDTO;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,13 @@ import java.util.Date;
 public interface PixRegisterAPI {
 
 
+    @ApiOperation(
+            value = "Cadastra novo registro pix.",
+            consumes = "application/json",
+            produces = "application/json",
+            httpMethod = "POST",
+            response = UUIDRegisterDTO.class
+    )
     @RequestMapping(
             consumes = "application/json",
             produces = "application/json",
@@ -26,9 +34,17 @@ public interface PixRegisterAPI {
     )
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<UUIDRegisterDTO> createPixRegister(
-            @RequestBody PixRegisterRequest request
+             @RequestBody PixRegisterRequest request
     );
 
+
+    @ApiOperation(
+            value = "Desativa um registro pix.",
+            consumes = "application/json",
+            produces = "application/json",
+            httpMethod = "DELETE",
+            response = PixRegisterResponse.class
+    )
     @RequestMapping(
             value = "/{register_id}",
             produces = "application/json",
@@ -39,6 +55,14 @@ public interface PixRegisterAPI {
             @PathVariable(value = "register_id") String registerId
     );
 
+
+    @ApiOperation(
+            value = "Busca um registro pix pelo ID.",
+            consumes = "application/json",
+            produces = "application/json",
+            httpMethod = "GET",
+            response = PixRegisterResponse.class
+    )
     @RequestMapping(
             value = "/{register_id}",
             produces = "application/json",
@@ -48,6 +72,14 @@ public interface PixRegisterAPI {
             @PathVariable(value = "register_id") String registerId
     );
 
+
+    @ApiOperation(
+            value = "Busca registros pix baseado em filtros.",
+            consumes = "application/json",
+            produces = "application/json",
+            httpMethod = "GET",
+            response = PixRegisterResponse.class
+    )
     @RequestMapping(
             value = "/filter",
             produces = "application/json",
@@ -64,6 +96,14 @@ public interface PixRegisterAPI {
             @RequestParam(required = false)@DateTimeFormat(pattern = "yyyy-MM-dd") Date deletedAt
     );
 
+
+    @ApiOperation(
+            value = "Atualiza um registro pix.",
+            consumes = "application/json",
+            produces = "application/json",
+            httpMethod = "PATCH",
+            response = PixRegisterResponsePatch.class
+    )
     @RequestMapping(
             value = "/{register_id}",
             consumes = "application/json",
