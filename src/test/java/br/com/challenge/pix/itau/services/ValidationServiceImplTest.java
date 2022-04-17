@@ -16,11 +16,14 @@ import org.mockito.MockitoAnnotations;
 
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 
 class ValidationServiceImplTest {
@@ -226,10 +229,74 @@ class ValidationServiceImplTest {
                 .isInstanceOf(InvalidInputsException.class);
     }
     @Test
-    void accountNumberValid() {
+    void shouldThrowWhenPfAccountHasMoreThan5Registers(){
+        PixRegister pixRegister = PixRegister.of(new PixRegisterRequest(
+                "cpf",
+                "57365807806",
+                "corrente",
+                1101,
+                12312,
+                "Bruno",
+                "Pacheco"
+        ));
+        Integer accountNumber = 1111;
+        Integer agencyNumber = 2222;
+        String accountType = "corrente";
+        List<PixRegister> registerList = new ArrayList<>();
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        when(repository.findRegistersByAccountNumberAndAgencyNumberAndAccountType(
+                accountNumber,agencyNumber,accountType
+        )).thenReturn(registerList);
+
+        assertThatThrownBy(() -> underTest.validateIfAccountReachedMaxRegisters(accountNumber,agencyNumber,accountType))
+                .isInstanceOf(InvalidInputsException.class);
     }
 
     @Test
-    void agencyNumberValid() {
+    void shouldThrowWhenPjAccountHasMoreThan20Registers(){
+        PixRegister pixRegister = PixRegister.of(new PixRegisterRequest(
+                "cnpj",
+                "32203884000178",
+                "corrente",
+                1101,
+                12312,
+                "Bruno",
+                "Pacheco"
+        ));
+        Integer accountNumber = 1111;
+        Integer agencyNumber = 2222;
+        String accountType = "corrente";
+        List<PixRegister> registerList = new ArrayList<>();
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        registerList.add(pixRegister);
+        when(repository.findRegistersByAccountNumberAndAgencyNumberAndAccountType(
+                accountNumber,agencyNumber,accountType
+        )).thenReturn(registerList);
+
+        assertThatThrownBy(() -> underTest.validateIfAccountReachedMaxRegisters(accountNumber,agencyNumber,accountType))
+                .isInstanceOf(InvalidInputsException.class);
     }
+
 }

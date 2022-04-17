@@ -93,7 +93,7 @@ public interface PixRegisterAPI {
             @RequestParam(required = false) Integer accountNumber,
             @RequestParam(required = false) String userFirstName,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date createdAt,
-            @RequestParam(required = false)@DateTimeFormat(pattern = "yyyy-MM-dd") Date deletedAt
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date deletedAt
     );
 
 

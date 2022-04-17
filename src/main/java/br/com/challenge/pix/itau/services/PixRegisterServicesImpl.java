@@ -14,9 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -35,12 +39,13 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
     public UUIDRegisterDTO createRegister(PixRegisterRequest request) {
         validations.validateRequest(request);
         PixRegister register = PixRegister.of(request);
-        UUID randomUUID = UUID.randomUUID();
         register.setCreatedAt(new Date());
-        register.setId(randomUUID);
-        repository.save(register);
-        log.info("Novo registro inserido no banco. Registro: {}, UUID: {}, Data: {}", request.toString(), randomUUID.toString(), new Date());
-        return new UUIDRegisterDTO(randomUUID.toString());
+        String generatedUUID   = repository
+                    .save(register)
+                    .getId()
+                    .toString();
+        log.info("Novo registro inserido no banco. Registro: {}, UUID: {}, Data: {}", request.toString(),generatedUUID , new Date());
+        return new UUIDRegisterDTO(generatedUUID);
     }
 
     @Override
@@ -92,7 +97,7 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
                 userFirstName,
                 createdAt,
                 deletedAt,
-                PageRequest.of(page,size, Sort.by(Sort.Order.desc("created_at")))
+                PageRequest.of(page,size, Sort.by(Sort.Order.desc("createdAt")))
         );;
 
         if(filteredRegisters.isEmpty())

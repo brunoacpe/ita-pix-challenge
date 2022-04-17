@@ -10,7 +10,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PixRegisterResponse {
 
-    private UUID id;
+    @JsonProperty(value = "id")
+    private String id;
 
 
     @JsonProperty(value = "key_type")
@@ -48,7 +49,7 @@ public class PixRegisterResponse {
 
     public static PixRegisterResponse of (PixRegister register){
         PixRegisterResponse response = new PixRegisterResponse();
-        response.setId(register.getId());
+        response.setId(register.getId().toString());
         response.setKeyType(register.getKeyType());
         response.setKeyValue(register.getKeyValue());
         response.setAccountType(register.getAccountType());

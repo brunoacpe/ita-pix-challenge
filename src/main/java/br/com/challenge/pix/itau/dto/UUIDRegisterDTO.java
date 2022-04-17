@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @AllArgsConstructor
+@Getter
 public class UUIDRegisterDTO {
 
     @JsonProperty(value = "pix_register_uuid")

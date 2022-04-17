@@ -30,4 +30,6 @@ public interface ValidationService {
 
     void agencyNumberValid(Integer agencyNumber);
 
+    void validateIfAccountReachedMaxRegisters(Integer accountNumber, Integer agencyNumber, String accountType);
+
 }

@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 @NoArgsConstructor
+@Slf4j
 public class ValidationServiceImpl implements ValidationService {
     @Autowired
     private  PixRegisterRepository registerRepository;
@@ -33,6 +35,9 @@ public class ValidationServiceImpl implements ValidationService {
 
     private final String CNPJ = "cnpj";
 
+    private final Integer pfMaxNumberOfRegisters = 5;
+
+    private final Integer pjMaxNumberOfRegisters = 20;
     private final String EMAIL = "email";
 
     @Override
@@ -71,6 +76,7 @@ public class ValidationServiceImpl implements ValidationService {
         accountTypeValid(accountType);
         agencyNumberValid(agencyNumber);
         accountNumberValid(accountNumber);
+        validateIfAccountReachedMaxRegisters(accountNumber,agencyNumber,accountType);
         validateUserLastName(userLastName);
         validateUserFirstName(userFirstName);
     }
@@ -156,5 +162,36 @@ public class ValidationServiceImpl implements ValidationService {
             throw new InvalidInputsException("O número da agência deve ser informado obrigatóriamente!");
         if (String.valueOf(agencyNumber).length() > 4)
             throw new InvalidInputsException("O número da agência deve ter 4 ou menos dígitos!");
+    }
+
+    @Override
+    public void validateIfAccountReachedMaxRegisters(Integer accountNumber, Integer agencyNumber, String accountType) {
+        List<PixRegister> list = registerRepository.findRegistersByAccountNumberAndAgencyNumberAndAccountType(
+                accountNumber,agencyNumber,accountType
+        );
+        if(list.isEmpty()) {
+            return;
+        }
+
+        list.removeIf(register -> register.getDeletedAt() != null);
+
+
+        Integer numberOfRegisters =  list.size();
+
+        String accountTypePfOrPj = "";
+
+        for (PixRegister register : list) {
+            if (register.getKeyType().equalsIgnoreCase("cpf")) {
+                accountTypePfOrPj = "PF";
+            } else if (register.getKeyType().equalsIgnoreCase("cnpj")) {
+                accountTypePfOrPj = "PJ";
+            }
+        }
+
+        if(accountTypePfOrPj.equalsIgnoreCase("PF")&&numberOfRegisters >= pfMaxNumberOfRegisters)
+            throw new InvalidInputsException("Conta pessoa fisíca só pode ter no máximo 5 registros PIX.");
+
+        if(accountTypePfOrPj.equalsIgnoreCase("PJ")&&numberOfRegisters >= (pjMaxNumberOfRegisters))
+            throw new InvalidInputsException("Conta pessoa jurídica só pode ter no máximo 20 registros PIX.");
     }
 }

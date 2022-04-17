@@ -64,8 +64,12 @@ public class PixRegisterServicesTests {
                 "Bruno",
                 "Pacheco"
         );
+        UUID generatedUUID = UUID.randomUUID();
+        PixRegister returnValue = PixRegister.of(pixRegisterRequest);
+        returnValue.setId(generatedUUID);
+
         when(repository.save(any(PixRegister.class)))
-                .then(returnsFirstArg());
+                .thenReturn(returnValue);
         UUIDRegisterDTO savedRegister = underTest.createRegister(pixRegisterRequest);
         assertNotNull(savedRegister);
     }
@@ -154,7 +158,7 @@ public class PixRegisterServicesTests {
                 null,
                 createdAt,
                 null,
-                PageRequest.of(page,size,Sort.by(Sort.Order.desc("created_at")))
+                PageRequest.of(page,size,Sort.by(Sort.Order.desc("createdAt")))
         )).thenReturn(new PageImpl<>(List.of(register)));
 
         assertNotNull(underTest.findRegistersFiltered(
@@ -174,7 +178,7 @@ public class PixRegisterServicesTests {
                 null,
                 createdAt,
                 null,
-                PageRequest.of(page,size,Sort.by(Sort.Order.desc("created_at")))
+                PageRequest.of(page,size,Sort.by(Sort.Order.desc("createdAt")))
         )).thenReturn(new PageImpl<>(List.of()));
 
         assertThatThrownBy(() -> underTest.findRegistersFiltered(
@@ -259,7 +263,7 @@ public class PixRegisterServicesTests {
     }
 
     @Test
-    void shouldSucssedDeactivatePixRegister(){
+    void shouldSucceedDeactivatePixRegister(){
         UUID id = UUID.randomUUID();
         PixRegister register = new PixRegister(
                 id,
