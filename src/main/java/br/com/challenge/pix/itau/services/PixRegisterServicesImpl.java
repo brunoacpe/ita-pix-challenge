@@ -107,14 +107,12 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
 
     @Override
     public PixRegisterResponsePatch patchPixRegister(String registerId, PixRegisterRequest request) {
+        validations.validatePatchRequest(request);
         PixRegister register = repository.findById(UUID.fromString(registerId))
                 .orElseThrow(() -> new NoRegistersReturnedException("Não foi encontrado nenhum registro com este ID."));
 
         if(register.getDeletedAt()!=null)
             throw new InvalidInputsException("Não é possível alterar registros inativados.");
-
-        validations.validatePatchRequest(request);
-
         register.setAccountType(request.getAccountType());
         register.setAccountNumber(request.getAccountNumber());
         register.setAgencyNumber(request.getAgencyNumber());
