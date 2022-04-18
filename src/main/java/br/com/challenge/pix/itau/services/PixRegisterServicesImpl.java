@@ -82,21 +82,15 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
             String keyType,
             Integer agencyNumber,
             Integer accountNumber,
-            String userFirstName,
-            Date createdAt,
-            Date deletedAt
+            String userFirstName
     ) {
 
-        if(createdAt!=null&&deletedAt!=null)
-            throw new InvalidInputsException("Não é permitido filtrar com os dois campos de auditoria de data. Apenas um.");
 
         Page<PixRegister> filteredRegisters =  repository.findPixRegistersFiltered(
                 keyType,
                 agencyNumber,
                 accountNumber,
                 userFirstName,
-                createdAt,
-                deletedAt,
                 PageRequest.of(page,size, Sort.by(Sort.Order.desc("createdAt")))
         );;
 
@@ -127,7 +121,7 @@ public class PixRegisterServicesImpl implements PixRegisterServices{
         register.setUserFirstName(request.getUserFirstName());
         register.setUserLastName(request.getUserLastName());
         repository.save(register);
-
+        log.info("Registro atualizado com sucesso. Id: {}, Registro: {}", register.getId().toString(),register.toString());
         return PixRegisterResponsePatch.of(register);
     }
 }

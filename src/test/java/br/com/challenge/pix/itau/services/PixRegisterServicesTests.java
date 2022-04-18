@@ -109,29 +109,6 @@ public class PixRegisterServicesTests {
         assertNotNull(savedRegister);
     }
 
-    @Test
-    void shouldThrowExceptionWhenTryToFilterWithTheTwoDateFields() {
-        Integer page = 0;
-        Integer size = 10;
-        String keyType = "email";
-        Date createdAt = new Date();
-        Date deletedAt = new Date();
-        PixRegister register = new PixRegister();
-        when(repository.findPixRegistersFiltered(
-                keyType,
-                1231,
-                12321313,
-                "Bruno",
-                createdAt,
-                deletedAt,
-                PageRequest.of(page,size,Sort.by(Sort.Order.desc("created_at")))
-        ))
-                .thenReturn(new PageImpl<>(List.of(register)));
-
-        assertThatThrownBy(() -> underTest.findRegistersFiltered(page, size, keyType, null, null, null, createdAt, deletedAt))
-                .isInstanceOf(InvalidInputsException.class);
-
-    }
 
     @Test
     void shouldSucssedWhenFiltering(){
@@ -156,13 +133,11 @@ public class PixRegisterServicesTests {
                 null,
                 null,
                 null,
-                createdAt,
-                null,
                 PageRequest.of(page,size,Sort.by(Sort.Order.desc("createdAt")))
         )).thenReturn(new PageImpl<>(List.of(register)));
 
         assertNotNull(underTest.findRegistersFiltered(
-                page,size,keyType,null,null,null,createdAt,null
+                page,size,keyType,null,null,null
         ));
     }
     @Test
@@ -176,13 +151,11 @@ public class PixRegisterServicesTests {
                 null,
                 null,
                 null,
-                createdAt,
-                null,
                 PageRequest.of(page,size,Sort.by(Sort.Order.desc("createdAt")))
         )).thenReturn(new PageImpl<>(List.of()));
 
         assertThatThrownBy(() -> underTest.findRegistersFiltered(
-                page, size, keyType, null, null, null, createdAt, null)
+                page, size, keyType, null, null, null)
         )
                 .isInstanceOf(NoRegistersReturnedException.class);
     }

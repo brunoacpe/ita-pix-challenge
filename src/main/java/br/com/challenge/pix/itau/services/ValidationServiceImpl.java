@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -137,6 +138,8 @@ public class ValidationServiceImpl implements ValidationService {
     public void emailValidations(String email) {
         if (registerRepository.findByEmail(email).isPresent())
             throw new InvalidInputsException("Já existe esse email cadastrado como chave pix.");
+        if(!Pattern.compile(REGEX_EMAIL).matcher(email).matches())
+            throw new InvalidInputsException("Email inválido.");
         if (email.length() > 77)
             throw new InvalidInputsException("A quantidade de caracteres do e-mail deve ser inferior ou igual a 77.");
     }

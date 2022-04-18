@@ -13,6 +13,7 @@ import java.util.UUID;
         name = "pix_registers",
         schema = "public"
 )
+
 public class PixRegister {
 
     @Id

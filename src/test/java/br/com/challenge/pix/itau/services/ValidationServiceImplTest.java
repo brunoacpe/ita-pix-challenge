@@ -299,4 +299,17 @@ class ValidationServiceImplTest {
                 .isInstanceOf(InvalidInputsException.class);
     }
 
+    @Test
+    void shouldThrowInvalidInputsExceptionWhenEmailIsInvalid(){
+        assertThatThrownBy(() -> underTest.emailValidations("emailinvalido"))
+                .isInstanceOf(InvalidInputsException.class);
+
+    }
+    @Test
+    void shouldThrowInvalidInputsExceptionWhenEmailHasMoreThan77characters(){
+        assertThatThrownBy(() -> underTest.emailValidations("esseemailcomoinputcomcertezavaifalharporqueeletemmaisde77caracteres@gmail.com.br"))
+                .isInstanceOf(InvalidInputsException.class);
+    }
+
+
 }

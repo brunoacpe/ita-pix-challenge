@@ -24,9 +24,7 @@ public interface PixRegisterServices {
             String keyType,
             Integer agencyNumber,
             Integer accountNumber,
-            String userFirstName,
-            Date createdAt,
-            Date deletedAt
+            String userFirstName
     );
 
     PixRegisterResponsePatch patchPixRegister(String registerId, PixRegisterRequest request);

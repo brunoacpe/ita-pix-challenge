@@ -48,17 +48,13 @@ public interface PixRegisterRepository extends JpaRepository<PixRegister, UUID>,
                     "WHERE (:keyType IS NULL OR register.keyType = :keyType) " +
                     "AND (:agencyNumber IS NULL OR register.agencyNumber = :agencyNumber) " +
                     "AND (:accountNumber IS NULL OR register.accountNumber = :accountNumber) " +
-                    "AND (:userFirstName IS NULL OR register.userFirstName = :userFirstName) " +
-                    "AND (cast (:createdAt as date) IS NULL OR register.createdAt = :createdAt) " +
-                    "AND (cast (:deletedAt as date) IS NULL OR register.deletedAt = :deletedAt)"
+                    "AND (:userFirstName IS NULL OR register.userFirstName = :userFirstName) "
     )
     Page<PixRegister> findPixRegistersFiltered(
             @Param("keyType") String keyType,
             @Param("agencyNumber") Integer agencyNumber,
             @Param("accountNumber") Integer accountNumber,
             @Param("userFirstName") String userFirstName,
-            @Param("createdAt") Date createdAt,
-            @Param("deletedAt") Date deletedAt,
             Pageable pageable
     );
 }
