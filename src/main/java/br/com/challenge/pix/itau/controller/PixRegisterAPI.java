@@ -40,7 +40,6 @@ public interface PixRegisterAPI {
 
     @ApiOperation(
             value = "Desativa um registro pix.",
-            consumes = "application/json",
             produces = "application/json",
             httpMethod = "DELETE",
             response = PixRegisterResponse.class
@@ -58,7 +57,6 @@ public interface PixRegisterAPI {
 
     @ApiOperation(
             value = "Busca um registro pix pelo ID.",
-            consumes = "application/json",
             produces = "application/json",
             httpMethod = "GET",
             response = PixRegisterResponse.class
@@ -75,7 +73,6 @@ public interface PixRegisterAPI {
 
     @ApiOperation(
             value = "Busca registros pix baseado em filtros.",
-            consumes = "application/json",
             produces = "application/json",
             httpMethod = "GET",
             response = PixRegisterResponse.class
